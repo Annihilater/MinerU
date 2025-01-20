@@ -1,60 +1,32 @@
-### Install Git LFS
-Before you begin, make sure Git Large File Storage (Git LFS) is installed on your system. Install it using the following command:
+Model downloads are divided into initial downloads and updates to the model directory. Please refer to the corresponding documentation for instructions on how to proceed.
 
-```bash
-git lfs install
-```
+
+# Initial download of model files
 
 ### Download the Model from Hugging Face
-To download the `PDF-Extract-Kit` model from Hugging Face, use the following command:
 
+Use a Python Script to Download Model Files from Hugging Face
 ```bash
-git lfs clone https://huggingface.co/wanderkid/PDF-Extract-Kit
+pip install huggingface_hub
+wget https://github.com/opendatalab/MinerU/raw/master/scripts/download_models_hf.py -O download_models_hf.py
+python download_models_hf.py
 ```
+The Python script will automatically download the model files and configure the model directory in the configuration file.
 
-Ensure that Git LFS is enabled during the clone to properly download all large files.
-
-
-
-### Download the Model from ModelScope
-
-#### SDK Download
-
-```bash
-# First, install the ModelScope library using pip:
-pip install modelscope
-```
-
-```python
-# Use the following Python code to download the model using the ModelScope SDK:
-from modelscope import snapshot_download
-model_dir = snapshot_download('wanderkid/PDF-Extract-Kit')
-```
-
-#### Git Download
-Alternatively, you can use Git to clone the model repository from ModelScope:
-
-```bash
-git clone https://www.modelscope.cn/wanderkid/PDF-Extract-Kit.git
-```
+The configuration file can be found in the user directory, with the filename `magic-pdf.json`.
 
 
-Put [model files]() here:
+# How to update models previously downloaded
 
-```
-./
-├── Layout
-│   ├── config.json
-│   └── weights.pth
-├── MFD
-│   └── weights.pt
-├── MFR
-│   └── UniMERNet
-│       ├── config.json
-│       ├── preprocessor_config.json
-│       ├── pytorch_model.bin
-│       ├── README.md
-│       ├── tokenizer_config.json
-│       └── tokenizer.json
-└── README.md
-```
+## 1. Models downloaded via Git LFS
+
+> [!IMPORTANT]
+> Due to feedback from some users that downloading model files using git lfs was incomplete or resulted in corrupted model files, this method is no longer recommended.
+>
+> For versions 0.9.x and later, due to the repository change and the addition of the layout sorting model in PDF-Extract-Kit 1.0, the models cannot be updated using the `git pull` command. Instead, a Python script must be used for one-click updates.
+
+When magic-pdf <= 0.8.1, if you have previously downloaded the model files via git lfs, you can navigate to the previous download directory and update the models using the `git pull` command.
+
+## 2. Models downloaded via Hugging Face or Model Scope
+
+If you previously downloaded models via Hugging Face or Model Scope, you can rerun the Python script used for the initial download. This will automatically update the model directory to the latest version.

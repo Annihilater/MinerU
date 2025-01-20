@@ -1,61 +1,47 @@
-### 安装 Git LFS
-开始之前，请确保您的系统上已安装 Git 大文件存储 (Git LFS)。使用以下命令进行安装
+模型下载分为首次下载和更新模型目录，请参考对应的文档内容进行操作
+
+# 首次下载模型文件
+
+模型文件可以从 Hugging Face 或 Model Scope 下载，由于网络原因，国内用户访问HF可能会失败，请使用 ModelScope。
+
+<details>
+  <summary>方法一：从 Hugging Face 下载模型</summary>
+  <p>使用python脚本 从Hugging Face下载模型文件</p>
+  <pre><code>pip install huggingface_hub
+wget https://gcore.jsdelivr.net/gh/opendatalab/MinerU@master/scripts/download_models_hf.py -O download_models_hf.py
+python download_models_hf.py</code></pre>
+  <p>python脚本会自动下载模型文件并配置好配置文件中的模型目录</p>
+</details>
+
+## 方法二：从 ModelScope 下载模型
+
+### 使用python脚本 从ModelScope下载模型文件
 
 ```bash
-git lfs install
-```
-
-### 从 Hugging Face 下载模型
-请使用以下命令从 Hugging Face 下载 PDF-Extract-Kit 模型：
-
-```bash
-git lfs clone https://huggingface.co/wanderkid/PDF-Extract-Kit
-```
-
-确保在克隆过程中启用了 Git LFS，以便正确下载所有大文件。
-
-
-### 从 ModelScope 下载模型
-
-#### SDK下载
-
-```bash
-# 首先安装modelscope
 pip install modelscope
+wget https://gcore.jsdelivr.net/gh/opendatalab/MinerU@master/scripts/download_models.py -O download_models.py
+python download_models.py
 ```
+python脚本会自动下载模型文件并配置好配置文件中的模型目录
 
-```python
-# 使用modelscope sdk下载模型
-from modelscope import snapshot_download
-model_dir = snapshot_download('wanderkid/PDF-Extract-Kit')
-```
+配置文件可以在用户目录中找到，文件名为`magic-pdf.json`
 
-#### Git下载
-也可以使用git clone从 ModelScope 下载模型:
-
-```bash
-git clone https://www.modelscope.cn/wanderkid/PDF-Extract-Kit.git
-```
+> [!TIP]
+> windows的用户目录为 "C:\\Users\\用户名", linux用户目录为 "/home/用户名", macOS用户目录为 "/Users/用户名"
 
 
-将 'models' 目录移动到具有较大磁盘空间的目录中，最好是在固态硬盘(SSD)上。
+# 此前下载过模型，如何更新
+
+## 1. 通过git lfs下载过模型
+
+> [!IMPORTANT]
+> 由于部分用户反馈通过git lfs下载模型文件遇到下载不全和模型文件损坏情况，现已不推荐使用该方式下载。
+> 
+> 0.9.x及以后版本由于PDF-Extract-Kit 1.0更换仓库和新增layout排序模型，不能通过`git pull`命令更新，需要使用python脚本一键更新。
+
+当magic-pdf <= 0.8.1时，如此前通过 git lfs 下载过模型文件，可以进入到之前的下载目录中，通过`git pull`命令更新模型。
 
 
-模型文件夹的结构如下，包含了不同组件的配置文件和权重文件：
-```
-./
-├── Layout
-│   ├── config.json
-│   └── model_final.pth
-├── MFD
-│   └── weights.pt
-├── MFR
-│   └── UniMERNet
-│       ├── config.json
-│       ├── preprocessor_config.json
-│       ├── pytorch_model.bin
-│       ├── README.md
-│       ├── tokenizer_config.json
-│       └── tokenizer.json
-└── README.md
-```
+## 2. 通过 Hugging Face 或 Model Scope 下载过模型
+
+如此前通过 HuggingFace 或 Model Scope 下载过模型，可以重复执行此前的模型下载python脚本，将会自动将模型目录更新到最新版本。
